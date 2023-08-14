@@ -18,9 +18,9 @@ jobs:
     - name: Install Vagrant
       run: |
         sudo apt-get install -y qemu libvirt-daemon-system ebtables libguestfs-tools vagrant ruby-fog-libvirt
-        vagrant plugin install vagrant-libvirt
+        sudo vagrant plugin install vagrant-libvirt
     - name: Launch vagrant box
-      run: vagrant up --provider=libvirt
+      run: sudo vagrant up --provider=libvirt
     - name: Destroy vagrant box
-      run: vagrant destroy --force
+      run: sudo vagrant destroy --force
 
