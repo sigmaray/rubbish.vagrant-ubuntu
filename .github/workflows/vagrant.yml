@@ -14,13 +14,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install Vagrant
-      run: |
-        sudo apt-get install -y qemu libvirt-daemon-system ebtables libguestfs-tools vagrant ruby-fog-libvirt
-        sudo vagrant plugin install vagrant-libvirt
-    - name: Launch vagrant box
-      run: sudo vagrant up --provider=libvirt
-    - name: Destroy vagrant box
-      run: sudo vagrant destroy --force
+      - uses: actions/checkout@v3
+      - name: Set up libvirt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            bridge-utils \
+            dnsmasq-base \
+            ebtables \
+            libarchive-tools \
+            libguestfs-tools \
+            libvirt-clients \
+            libvirt-daemon \
+            libvirt-daemon-system \
+            qemu-kvm \
+            qemu-utils \
+          ;
+          sudo apt-get install -y \
+            libvirt-dev \
+            libz-dev \
+          ;
 
+          # start daemon
+          sudo systemctl start libvirtd
+
+          # add user to group
+          sudo usermod -a -G libvirt $USER
+      - name: Install Vagrant
+        run: |
+          sudo apt-get install -y vagrant ruby-fog-libvirt
+          sudo vagrant plugin install vagrant-libvirt
+      - name: Launch vagrant box
+        run: sudo vagrant up --provider=libvirt
+      - name: Destroy vagrant box
+        run: sudo vagrant destroy --force

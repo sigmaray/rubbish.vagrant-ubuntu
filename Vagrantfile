@@ -14,6 +14,12 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "generic/ubuntu2204"
 
+  Vagrant.configure("2") do |config|
+    config.vm.provider :libvirt do |libvirt|
+      libvirt.driver = "qemu"
+    end
+  end
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
